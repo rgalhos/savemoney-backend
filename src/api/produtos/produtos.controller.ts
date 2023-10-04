@@ -1,7 +1,10 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { ProdutosService } from './produtos.service';
-import { ProdutosModel } from 'src/models/produtos.model';
-import { searchProductSefaz } from 'src/infra/sefaz/search-product-sefaz';
+import type { ProdutosService } from 'src/api/produtos/produtos.service';
+import type { ProdutosModel } from 'src/models/produtos.model';
+import {
+    searchProductSefaz,
+    type ISearchProductSefazParsedReturn,
+} from 'src/infra/sefaz/search-product-sefaz';
 
 @Controller('produtos')
 export class ProdutosController {
@@ -16,9 +19,11 @@ export class ProdutosController {
     async getByQuery(@Query('q') q: string): Promise<any> {
         if (!q) return [];
 
-        return searchProductSefaz(q);
+        const searchResult: ISearchProductSefazParsedReturn = await searchProductSefaz(q);
 
-        // return this.produtosService.searchProducts(q);
+        this.produtosService.handleSearchResults(searchResult);
+
+        return searchResult.products;
     }
 
     @Get('/health')

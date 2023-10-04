@@ -21,3 +21,5 @@ export class ProdutosModel extends Model {
     })
     nome: string;
 }
+
+export type RawProdutosModel = RawModel<ProdutosModel>;

@@ -1,3 +1,5 @@
+import type { Model } from 'sequelize-typescript';
+
 export {};
 
 declare global {
@@ -9,4 +11,10 @@ declare global {
         {
             [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>>;
         }[Keys];
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    type RawModel<T> = Omit<T, keyof Model> & {
+        createdAt?: Date | any;
+        updatedAt?: Date | any;
+    };
 }

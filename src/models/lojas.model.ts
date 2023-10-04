@@ -36,16 +36,18 @@ export class LojasModel extends Model {
     cep: string;
 
     @Column({
-        type: DataType.STRING,
+        type: DataType.DOUBLE,
         allowNull: true,
         unique: false,
     })
-    latitude: string;
+    latitude: number;
 
     @Column({
-        type: DataType.STRING,
+        type: DataType.DOUBLE,
         allowNull: true,
         unique: false,
     })
-    longitude: string;
+    longitude: number;
 }
+
+export type RawLojasModel = RawModel<LojasModel>;

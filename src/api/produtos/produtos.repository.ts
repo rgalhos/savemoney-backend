@@ -24,18 +24,18 @@ export class ProdutosRepository {
         });
     }
 
-    async update(id: string, product: ProdutosModel): Promise<ProdutosModel> {
-        const existing = await this.produtosModel.findByPk(id);
+    async update(codBarra: string, product: ProdutosModel): Promise<ProdutosModel> {
+        const existing = await this.produtosModel.findByPk(codBarra);
 
         if (!existing) throw new Error('does not exist');
 
         return existing.update(product);
     }
 
-    async delete(id: string): Promise<number> {
+    async delete(codBarra: string): Promise<number> {
         return this.produtosModel.destroy({
             where: {
-                codBarra: id,
+                codBarra: codBarra,
             },
         });
     }

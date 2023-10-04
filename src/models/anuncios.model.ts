@@ -1,6 +1,6 @@
 import { Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
-import { ProdutosModel } from './produtos.model';
-import { LojasModel } from './lojas.model';
+import { ProdutosModel } from 'src/models/produtos.model';
+import { LojasModel } from 'src/models/lojas.model';
 
 @Table({
     tableName: 'produtos',
@@ -33,3 +33,5 @@ export class AnunciosModel extends Model {
     })
     preco: number;
 }
+
+export type RawAnunciosModel = RawModel<AnunciosModel>;
