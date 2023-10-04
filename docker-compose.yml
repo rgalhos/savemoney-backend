@@ -16,6 +16,20 @@ services:
     volumes:
       - 'savemoney-db-data:/var/lib/postgresql/data'
     network_mode: 'host'
+
+  api:
+    container_name: savemoney_api
+    build:
+      dockerfile: ./Dockerfile
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+    ports:
+      - '8991:3000'
+    network_mode: 'host'
+
+
 volumes:
   savemoney-db-data:
     driver: local
