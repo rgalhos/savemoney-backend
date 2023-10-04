@@ -15,7 +15,8 @@ services:
       - '5432:5432'
     volumes:
       - 'savemoney-db-data:/var/lib/postgresql/data'
-    network_mode: 'host'
+    networks:
+      - savemoney-network
 
   api:
     container_name: savemoney_api
@@ -25,11 +26,19 @@ services:
       - db
     env_file:
       - ./.env
+    environment:
+      - DB_HOST='savemoney-db'
     ports:
-      - '8991:3000'
-    network_mode: 'host'
+      - '3000:3000'
+    networks:
+      - savemoney-network
 
 
 volumes:
   savemoney-db-data:
     driver: local
+
+networks:
+  savemoney-network:
+    driver: bridge
+
