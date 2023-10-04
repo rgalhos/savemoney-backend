@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  db:
+    container_name: savemoney-db
+    image: postgres
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      POSTGRES_PASSWORD: '${DB_PASS}'
+      POSTGRES_USER: '${DB_USER}'
+      POSTGRES_DB: '${DB_NAME}'
+    ports:
+      - '5432:5432'
+    volumes:
+      - 'savemoney-db-data:/var/lib/postgresql/data'
+    network_mode: 'host'
+volumes:
+  savemoney-db-data:
+    driver: local
