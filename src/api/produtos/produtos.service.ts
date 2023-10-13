@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import type { ProdutosRepository } from 'src/api/produtos/produtos.repository';
-import type { ProdutosModel } from 'src/models/produtos.model';
-import type { ISearchProductSefazParsedReturn } from 'src/infra/sefaz/search-product-sefaz';
+import { ProdutosRepository } from 'src/api/produtos/produtos.repository';
+import { ProdutosModel } from 'src/models/produtos.model';
+import { ISearchProductSefazParsedReturn } from 'src/infra/sefaz/search-product-sefaz';
 import { LojasService } from '../lojas/lojas.service';
 import { AnunciosService } from '../anuncios/anuncios.service';
 import { LojasModel } from 'src/models/lojas.model';

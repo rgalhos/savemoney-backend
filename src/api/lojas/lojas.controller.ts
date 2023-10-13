@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import type { LojasService } from 'src/api/lojas/lojas.service';
-import type { LojasModel } from 'src/models/lojas.model';
+import { LojasService } from 'src/api/lojas/lojas.service';
+import { LojasModel } from 'src/models/lojas.model';
 
 @Controller('lojas')
 export class LojasController {

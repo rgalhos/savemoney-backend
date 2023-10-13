@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import type { AnunciosRepository } from 'src/api/anuncios/anuncios.repository';
-import type { AnunciosModel } from 'src/models/anuncios.model';
+import { AnunciosRepository } from 'src/api/anuncios/anuncios.repository';
+import { AnunciosModel } from 'src/models/anuncios.model';
 
 @Injectable()
 export class AnunciosService {

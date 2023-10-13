@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import type { LojasRepository } from 'src/api/lojas/lojas.repository';
-import type { LojasModel } from 'src/models/lojas.model';
+import { LojasRepository } from 'src/api/lojas/lojas.repository';
+import { LojasModel } from 'src/models/lojas.model';
 
 @Injectable()
 export class LojasService {

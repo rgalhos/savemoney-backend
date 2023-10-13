@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import type { ProdutosService } from 'src/api/produtos/produtos.service';
-import type { ProdutosModel } from 'src/models/produtos.model';
+import { ProdutosService } from 'src/api/produtos/produtos.service';
+import { ProdutosModel } from 'src/models/produtos.model';
 import {
     searchProductSefaz,
     type ISearchProductSefazParsedReturn,
