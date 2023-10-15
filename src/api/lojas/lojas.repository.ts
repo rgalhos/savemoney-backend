@@ -17,9 +17,14 @@ export class LojasRepository {
         return await this.lojasModel.findByPk(cnpj);
     }
 
-    async create(store: LojasModel): Promise<LojasModel> {
-        return await this.lojasModel.create({
-            ...store,
+    async create(store: LojasModel): Promise<[LojasModel, boolean]> {
+        return await this.lojasModel.findOrCreate({
+            where: {
+                cnpj: store.cnpj,
+            },
+            defaults: {
+                ...store,
+            },
         });
     }
 

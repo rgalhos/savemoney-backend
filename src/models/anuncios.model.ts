@@ -3,7 +3,7 @@ import { ProdutosModel } from 'src/models/produtos.model';
 import { LojasModel } from 'src/models/lojas.model';
 
 @Table({
-    tableName: 'produtos',
+    tableName: 'anuncios',
     freezeTableName: true,
     underscored: false,
 })
@@ -11,7 +11,6 @@ export class AnunciosModel extends Model {
     @ForeignKey(() => ProdutosModel)
     @Column({
         type: DataType.STRING,
-        primaryKey: true,
         allowNull: false,
         unique: true,
     })
@@ -20,9 +19,8 @@ export class AnunciosModel extends Model {
     @ForeignKey(() => LojasModel)
     @Column({
         type: DataType.STRING,
-        primaryKey: true,
         allowNull: false,
-        unique: true,
+        unique: false,
     })
     loja: string;
 

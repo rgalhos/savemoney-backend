@@ -23,7 +23,7 @@ export class ProdutosService {
         return this.produtosRepository.getByCodBarra(codBarra);
     }
 
-    async createProduct(product: ProdutosModel): Promise<ProdutosModel> {
+    async createProduct(product: ProdutosModel): Promise<[ProdutosModel, boolean]> {
         return this.produtosRepository.create(product);
     }
 

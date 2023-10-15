@@ -45,11 +45,10 @@ export async function searchProductSefaz(query: string): Promise<ISearchProductS
         if (
             '0' !== loja.cnpj &&
             !Object.prototype.hasOwnProperty.call(parsedStores, loja.cnpj) &&
-            loja.nomeFantasia &&
             loja.endereco
         ) {
             let endereco: string = loja.endereco.nomeLogradouro;
-            if (loja.endereco.numeroImovel) endereco += 'n° ' + loja.endereco.numeroImovel;
+            if (loja.endereco.numeroImovel) endereco += ', n° ' + loja.endereco.numeroImovel;
 
             parsedStores[loja.cnpj] = {
                 cnpj: loja.cnpj,
@@ -57,7 +56,7 @@ export async function searchProductSefaz(query: string): Promise<ISearchProductS
                 endereco: endereco,
                 latitude: loja.endereco.latitude,
                 longitude: loja.endereco.longitude,
-                nome: loja.razaoSocial,
+                nome: loja.nomeFantasia || loja.razaoSocial,
             };
 
             _ok++; // @todo
@@ -87,13 +86,15 @@ export async function searchProductSefaz(query: string): Promise<ISearchProductS
         if (
             _ok === 2 && // @todo
             !isNaN(valorVenda) &&
-            valorVenda > 0
+            valorVenda > 0.0
         ) {
             parsedClassifieds.push({
                 loja: loja.cnpj, // FK->lojas(cnpj)
                 produto: codBarras, // FK->produtos(codBarras)
-                preco: valorVenda as number,
+                preco: Number(valorVenda),
             });
+
+            console.log(parsedClassifieds[parsedClassifieds.length - 1]);
         }
         //#endregion parse anúncio
     }

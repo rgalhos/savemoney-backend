@@ -8,7 +8,7 @@ declare global {
             /** @description Converter para number */
             DB_PORT: string;
             DB_USER: string;
-            DB_PASS: string;
+            DB_PASS?: string;
             DB_NAME: string;
             /**
              * @description Converter para number

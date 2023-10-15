@@ -14,7 +14,7 @@ export class AnunciosService {
         return this.anunciosRepository.getById(codBarra);
     }
 
-    async createClassified(classified: AnunciosModel): Promise<AnunciosModel> {
+    async createClassified(classified: AnunciosModel): Promise<[AnunciosModel, boolean]> {
         return this.anunciosRepository.create(classified);
     }
 

@@ -18,9 +18,14 @@ export class ProdutosRepository {
         return await this.produtosModel.findByPk(codBarra);
     }
 
-    async create(product: ProdutosModel): Promise<ProdutosModel> {
-        return await this.produtosModel.create({
-            ...product,
+    async create(product: ProdutosModel): Promise<[ProdutosModel, boolean]> {
+        return await this.produtosModel.findOrCreate({
+            where: {
+                codBarra: product.codBarra,
+            },
+            defaults: {
+                ...product,
+            },
         });
     }
 

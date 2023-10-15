@@ -14,7 +14,7 @@ export class LojasService {
         return this.lojasRepository.getByCNPJ(cnpj);
     }
 
-    async createStore(store: LojasModel): Promise<LojasModel> {
+    async createStore(store: LojasModel): Promise<[LojasModel, boolean]> {
         return this.lojasRepository.create(store);
     }
 

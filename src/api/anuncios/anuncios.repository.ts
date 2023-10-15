@@ -17,10 +17,31 @@ export class AnunciosRepository {
         return await this.anunciosModel.findByPk(id);
     }
 
-    async create(classified: AnunciosModel): Promise<AnunciosModel> {
-        return await this.anunciosModel.create({
-            ...classified,
+    /**
+     * @todo
+     */
+    async create(classified: AnunciosModel): Promise<[AnunciosModel, boolean]> {
+        const [anuncio, created] = await this.anunciosModel.findOrCreate({
+            where: {
+                produto: classified.produto,
+                loja: classified.loja,
+            },
+            defaults: {
+                ...classified,
+            },
         });
+
+        if (!created) {
+            await this.anunciosModel.update(classified, {
+                where: {
+                    produto: classified.produto,
+                    loja: classified.loja,
+                },
+                fields: ['preco'],
+            });
+        }
+
+        return [anuncio, created];
     }
 
     async update(id: string, classified: AnunciosModel): Promise<AnunciosModel> {
