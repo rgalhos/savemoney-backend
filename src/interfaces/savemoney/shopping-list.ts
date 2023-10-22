@@ -1,9 +1,17 @@
-import type { RawAnunciosModel } from 'src/models/anuncios.model';
-import type { RawLojasModel } from 'src/models/lojas.model';
-
 export type IBuildShoppingListResponse = Array<{
-    loja: RawLojasModel;
+    loja: {
+        cnpj: string;
+        nome: string;
+        endereco: string;
+        cep: string;
+        latitude: number;
+        longitude: number;
+    };
+    produtos: Array<{
+        codBarra: string;
+        nome: string;
+        preco: number;
+    }>;
     matches: number;
-    valorTotal: number;
-    produtos: RawAnunciosModel;
+    precoTotal: string;
 }>;

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ProdutosService } from 'src/api/produtos/produtos.service';
 import { LojasService } from 'src/api/lojas/lojas.service';
 import { AnunciosService } from 'src/api/anuncios/anuncios.service';
-// import type { IBuildShoppingListResponse } from 'src/interfaces/savemoney/shopping-list';
+import type { IBuildShoppingListResponse } from 'src/interfaces/savemoney/shopping-list';
 import { AnunciosModel, RawAnunciosModel } from 'src/models/anuncios.model';
 import { ProdutosModel, RawProdutosModel } from 'src/models/produtos.model';
 import { LojasModel, RawLojasModel } from 'src/models/lojas.model';
@@ -25,7 +25,7 @@ export class ListaService {
     /**
      * @todo arrumar relacionamentos
      */
-    async handleBuildShoppingList(arrCodBarras: string[]): Promise<any> {
+    async handleBuildShoppingList(arrCodBarras: string[]): Promise<IBuildShoppingListResponse> {
         console.log('<<<<<<<<<<<< ' + arrCodBarras.join('&'));
 
         const anuncios = await this.anunciosModel.findAll({
@@ -59,7 +59,7 @@ export class ListaService {
             loja: lojasObj[anuncio.lojaId],
         }));
 
-        const anunciosPorLoja: Dictionary<unknown[]> = {};
+        const anunciosPorLoja: Dictionary<Array<RawProdutosModel & { preco: number }>> = {};
 
         for (const anuncio of anunciosArr) {
             if (!anunciosPorLoja[anuncio.lojaId]) {
