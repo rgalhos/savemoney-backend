@@ -14,6 +14,10 @@ export class LojasService {
         return this.lojasRepository.getByCNPJ(cnpj);
     }
 
+    async getManyStoresByCNPJ(cnpjList: string[]): Promise<LojasModel[]> {
+        return this.lojasRepository.getManyByCNPJ(cnpjList);
+    }
+
     async createStore(store: LojasModel): Promise<[LojasModel, boolean]> {
         return this.lojasRepository.create(store);
     }

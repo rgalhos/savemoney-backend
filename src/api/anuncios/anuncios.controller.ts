@@ -16,8 +16,13 @@ export class AnunciosController {
         return 'OK anuncios';
     }
 
-    @Get(':id')
-    async getById(@Param('id') id: string): Promise<AnunciosModel | null> {
-        return this.anunciosService.getClassifiedById(id);
+    @Get('/byProduto/:codBarra')
+    async getByCodBarra(@Param('codBarra') codBarra: string): Promise<AnunciosModel[]> {
+        return this.anunciosService.getClassifiedByCodBarra(codBarra);
+    }
+
+    @Get('/byLoja/:cnpj')
+    async getByLoja(@Param('cnpj') cnpj: string): Promise<AnunciosModel[]> {
+        return this.anunciosService.getClassifiedByLoja(cnpj);
     }
 }

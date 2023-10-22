@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
 import { ProdutosModel } from 'src/models/produtos.model';
 
+type ProdutosWhereParams = WhereParams<ProdutosModel>;
+
 @Injectable()
 export class ProdutosRepository {
     constructor(
@@ -18,11 +20,20 @@ export class ProdutosRepository {
         return await this.produtosModel.findByPk(codBarra);
     }
 
+    async getManyByCodBarra(arrCodBarras: string[]): Promise<ProdutosModel[]> {
+        return await this.produtosModel.findAll({
+            where: {
+                codBarra: arrCodBarras,
+            } as ProdutosWhereParams,
+            raw: true,
+        });
+    }
+
     async create(product: ProdutosModel): Promise<[ProdutosModel, boolean]> {
         return await this.produtosModel.findOrCreate({
             where: {
                 codBarra: product.codBarra,
-            },
+            } as ProdutosWhereParams,
             defaults: {
                 ...product,
             },
@@ -41,7 +52,7 @@ export class ProdutosRepository {
         return this.produtosModel.destroy({
             where: {
                 codBarra: codBarra,
-            },
+            } as ProdutosWhereParams,
         });
     }
 

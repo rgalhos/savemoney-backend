@@ -17,8 +17,15 @@ export interface ISearchProductSefazParsedReturn {
     stores: RawLojasModel[];
 }
 
-export async function searchProductSefaz(query: string): Promise<ISearchProductSefazParsedReturn> {
-    const { data } = await axios.post<IPesquisaProdutoResponse>(SEARCH_ENDPOINT, {
+export async function searchProductSefaz(
+    query: string,
+    {
+        latitude,
+        longitude,
+        raio,
+    }: { latitude?: string | number; longitude?: string | number; raio?: string | number },
+): Promise<ISearchProductSefazParsedReturn> {
+    const sefazQuery: IPesquisaProdutoRequest = {
         produto: {
             descricao: query,
         },
@@ -27,13 +34,33 @@ export async function searchProductSefaz(query: string): Promise<ISearchProductS
                 codigoIBGE: Number(process.env.CODIGO_IBGE),
             },
         },
-        dias: 1,
-    } as IPesquisaProdutoRequest);
+        dias: 5,
+        registrosPorPagina: 5000,
+    };
+
+    latitude = Number(latitude);
+    longitude = Number(longitude);
+    raio = Number(raio);
+
+    if (!isNaN(latitude) && !isNaN(longitude) && latitude !== 0.0 && longitude !== 0.0) {
+        delete sefazQuery.estabelecimento.municipio;
+
+        sefazQuery.estabelecimento.geolocalizacao = {
+            latitude: latitude,
+            longitude: longitude,
+            raio: !isNaN(raio) ? raio : 5,
+        };
+    }
+
+    console.log(sefazQuery);
+
+    const { data } = await axios.post<IPesquisaProdutoResponse>(SEARCH_ENDPOINT, sefazQuery);
 
     const cont = data.conteudo;
     const parsedProducts: Dictionary<RawProdutosModel> = {};
     const parsedStores: Dictionary<RawLojasModel> = {};
     const parsedClassifieds: RawAnunciosModel[] = [];
+    const validProduct: Dictionary<number> = {};
 
     //#region for: itera sobre as vendas
     for (const el of cont) {
@@ -89,10 +116,12 @@ export async function searchProductSefaz(query: string): Promise<ISearchProductS
             valorVenda > 0.0
         ) {
             parsedClassifieds.push({
-                loja: loja.cnpj, // FK->lojas(cnpj)
-                produto: codBarras, // FK->produtos(codBarras)
+                lojaId: loja.cnpj, // FK->lojas(cnpj)
+                produtoId: codBarras, // FK->produtos(codBarras)
                 preco: Number(valorVenda),
             });
+
+            validProduct[codBarras] = (validProduct?.[codBarras] || 0) + 1;
 
             console.log(parsedClassifieds[parsedClassifieds.length - 1]);
         }
@@ -104,7 +133,9 @@ export async function searchProductSefaz(query: string): Promise<ISearchProductS
     delete parsedProducts['0'];
 
     return {
-        products: Object.values(parsedProducts),
+        products: Object.values(parsedProducts)
+            .filter((product) => validProduct[product.codBarra] > 0)
+            .sort((a, b) => validProduct[b.codBarra] - validProduct[a.codBarra]),
         classifieds: Object.values(parsedClassifieds),
         stores: Object.values(parsedStores),
     };

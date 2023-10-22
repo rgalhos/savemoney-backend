@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { AnunciosModel } from 'src/models/anuncios.model';
+import { AnunciosModel, RawAnunciosModel } from 'src/models/anuncios.model';
+// import { LojasModel } from 'src/models/lojas.model';
+// import { ProdutosModel } from 'src/models/produtos.model';
+
+type AnunciosWhereParams = WhereParams<AnunciosModel, { id: string }>;
+type AnunciosFieldParams = FieldParams<AnunciosModel>;
 
 @Injectable()
 export class AnunciosRepository {
@@ -17,15 +22,44 @@ export class AnunciosRepository {
         return await this.anunciosModel.findByPk(id);
     }
 
+    async getByCodBarra(codBarra: string): Promise<AnunciosModel[]> {
+        return await this.anunciosModel.findAll({
+            where: {
+                produtoId: codBarra,
+            } as AnunciosWhereParams,
+        });
+    }
+
+    async getByLoja(cnpj: string): Promise<AnunciosModel[]> {
+        return await this.anunciosModel.findAll({
+            where: {
+                lojaId: cnpj,
+            } as AnunciosWhereParams,
+        });
+    }
+
+    /**
+     * @todo
+     */
+    async getAndJoinTables(arrCodBarras: string[]): Promise<any> {
+        const anuncios = await this.anunciosModel.findAll({
+            where: {
+                produtoId: arrCodBarras,
+            } as AnunciosWhereParams,
+        });
+
+        const idsProdutos = anuncios.map((x: RawAnunciosModel) => x.produtoId);
+    }
+
     /**
      * @todo
      */
     async create(classified: AnunciosModel): Promise<[AnunciosModel, boolean]> {
         const [anuncio, created] = await this.anunciosModel.findOrCreate({
             where: {
-                produto: classified.produto,
-                loja: classified.loja,
-            },
+                produtoId: classified.produtoId,
+                lojaId: classified.lojaId,
+            } as AnunciosWhereParams,
             defaults: {
                 ...classified,
             },
@@ -34,10 +68,10 @@ export class AnunciosRepository {
         if (!created) {
             await this.anunciosModel.update(classified, {
                 where: {
-                    produto: classified.produto,
-                    loja: classified.loja,
-                },
-                fields: ['preco'],
+                    produtoId: classified.produtoId,
+                    lojaId: classified.lojaId,
+                } as AnunciosWhereParams,
+                fields: ['preco'] as AnunciosFieldParams,
             });
         }
 
@@ -56,7 +90,7 @@ export class AnunciosRepository {
         return this.anunciosModel.destroy({
             where: {
                 id: id,
-            },
+            } as AnunciosWhereParams,
         });
     }
 }

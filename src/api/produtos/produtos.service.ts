@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ProdutosRepository } from 'src/api/produtos/produtos.repository';
 import { ProdutosModel } from 'src/models/produtos.model';
-import { ISearchProductSefazParsedReturn } from 'src/infra/sefaz/search-product-sefaz';
-import { LojasService } from '../lojas/lojas.service';
-import { AnunciosService } from '../anuncios/anuncios.service';
+import type { ISearchProductSefazParsedReturn } from 'src/infra/sefaz/search-product-sefaz';
+import { LojasService } from 'src/api/lojas/lojas.service';
+import { AnunciosService } from 'src/api/anuncios/anuncios.service';
 import { LojasModel } from 'src/models/lojas.model';
 import { AnunciosModel } from 'src/models/anuncios.model';
 
@@ -21,6 +21,10 @@ export class ProdutosService {
 
     async getProductByCodBarra(codBarra: string): Promise<ProdutosModel | null> {
         return this.produtosRepository.getByCodBarra(codBarra);
+    }
+
+    async getManyProductsByCodBarra(arrCodBarra: string[]): Promise<ProdutosModel[]> {
+        return this.produtosRepository.getManyByCodBarra(arrCodBarra);
     }
 
     async createProduct(product: ProdutosModel): Promise<[ProdutosModel, boolean]> {

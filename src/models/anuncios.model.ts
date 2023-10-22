@@ -14,7 +14,7 @@ export class AnunciosModel extends Model {
         allowNull: false,
         unique: true,
     })
-    produto: string;
+    produtoId: string;
 
     @ForeignKey(() => LojasModel)
     @Column({
@@ -22,7 +22,7 @@ export class AnunciosModel extends Model {
         allowNull: false,
         unique: false,
     })
-    loja: string;
+    lojaId: string;
 
     @Column({
         type: DataType.DOUBLE,

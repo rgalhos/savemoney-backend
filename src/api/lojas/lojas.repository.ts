@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { LojasModel } from 'src/models/lojas.model';
 
+type LojasWhereParams = WhereParams<LojasRepository>;
+
 @Injectable()
 export class LojasRepository {
     constructor(
@@ -17,11 +19,20 @@ export class LojasRepository {
         return await this.lojasModel.findByPk(cnpj);
     }
 
+    async getManyByCNPJ(cnpjList: string[]): Promise<LojasModel[]> {
+        return await this.lojasModel.findAll({
+            where: {
+                cnpj: cnpjList,
+            } as LojasWhereParams,
+            raw: true,
+        });
+    }
+
     async create(store: LojasModel): Promise<[LojasModel, boolean]> {
         return await this.lojasModel.findOrCreate({
             where: {
                 cnpj: store.cnpj,
-            },
+            } as LojasWhereParams,
             defaults: {
                 ...store,
             },
@@ -40,7 +51,7 @@ export class LojasRepository {
         return this.lojasModel.destroy({
             where: {
                 cnpj: cnpj,
-            },
+            } as LojasWhereParams,
         });
     }
 }

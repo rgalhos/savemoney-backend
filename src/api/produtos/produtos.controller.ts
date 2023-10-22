@@ -16,10 +16,19 @@ export class ProdutosController {
     }
 
     @Get('/busca')
-    async getByQuery(@Query('q') q: string): Promise<any> {
+    async getByQuery(
+        @Query('q') q: string,
+        @Query('latitude') latitude: string,
+        @Query('longitude') longitude: string,
+        @Query('raio') raio: string,
+    ): Promise<any> {
         if (!q) return [];
 
-        const searchResult: ISearchProductSefazParsedReturn = await searchProductSefaz(q);
+        const searchResult: ISearchProductSefazParsedReturn = await searchProductSefaz(q, {
+            latitude,
+            longitude,
+            raio,
+        });
 
         this.produtosService.handleSearchResults(searchResult);
 

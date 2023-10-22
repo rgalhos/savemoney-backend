@@ -10,8 +10,16 @@ export class AnunciosService {
         return this.anunciosRepository.getAllClassifieds();
     }
 
-    async getClassifiedById(codBarra: string): Promise<AnunciosModel | null> {
-        return this.anunciosRepository.getById(codBarra);
+    async getClassifiedByCodBarra(codBarra: string): Promise<AnunciosModel[]> {
+        return this.anunciosRepository.getByCodBarra(codBarra);
+    }
+
+    async getClassifiedByLoja(cnpj: string): Promise<AnunciosModel[]> {
+        return this.anunciosRepository.getByLoja(cnpj);
+    }
+
+    async getClassifiedsAndJoinTables(arrCodBarra: string[]): Promise<any> {
+        return this.anunciosRepository.getAndJoinTables(arrCodBarra);
     }
 
     async createClassified(classified: AnunciosModel): Promise<[AnunciosModel, boolean]> {

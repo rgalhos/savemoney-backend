@@ -23,6 +23,10 @@ import { AnunciosRepository } from 'src/api/anuncios/anuncios.repository';
 import { AnunciosService } from 'src/api/anuncios/anuncios.service';
 import { AnunciosModel } from 'src/models/anuncios.model';
 //#endregion anuncios
+//#region lista
+import { ListaController } from 'src/api/lista/lista.controller';
+import { ListaService } from 'src/api/lista/lista.service';
+//#endregion lista
 
 @Module({
     imports: [
@@ -44,13 +48,20 @@ import { AnunciosModel } from 'src/models/anuncios.model';
         }),
         SequelizeModule.forFeature([ProdutosModel, LojasModel, AnunciosModel]),
     ],
-    controllers: [AppController, ProdutosController, LojasController, AnunciosController],
+    controllers: [
+        AppController,
+        ProdutosController,
+        LojasController,
+        AnunciosController,
+        ListaController,
+    ],
     providers: [
         // services
         AppService,
         ProdutosService,
         LojasService,
         AnunciosService,
+        ListaService,
 
         // repositories
         ProdutosRepository,
