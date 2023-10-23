@@ -2,22 +2,39 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
 //#region _app
-import { AppController } from './_app.controller';
-import { AppService } from './_app.service';
+import { AppController } from 'src/api/_app/_app.controller';
+import { AppService } from 'src/api/_app/_app.service';
 //#endregion _app
 //#region produtos
 import { ProdutosController } from 'src/api/produtos/produtos.controller';
 import { ProdutosRepository } from 'src/api/produtos/produtos.repository';
+import { ProdutosService } from 'src/api/produtos/produtos.service';
 import { ProdutosModel } from 'src/models/produtos.model';
 //#endregion produtos
+//#region lojas
+import { LojasController } from 'src/api/lojas/lojas.controller';
+import { LojasRepository } from 'src/api/lojas/lojas.repository';
+import { LojasService } from 'src/api/lojas/lojas.service';
 import { LojasModel } from 'src/models/lojas.model';
+//#endregion lojas
+//#region anuncios
+import { AnunciosController } from 'src/api/anuncios/anuncios.controller';
+import { AnunciosRepository } from 'src/api/anuncios/anuncios.repository';
+import { AnunciosService } from 'src/api/anuncios/anuncios.service';
 import { AnunciosModel } from 'src/models/anuncios.model';
-import { ProdutosService } from '../produtos/produtos.service';
+//#endregion anuncios
+//#region lista
+import { ListaController } from 'src/api/lista/lista.controller';
+import { ListaService } from 'src/api/lista/lista.service';
+//#endregion lista
 
 @Module({
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
+            // envFilePath:
+            //     ((process.env.NODE_ENV !== 'production' ? process.env.NODE_ENV : '') || '') +
+            // '.env',
             envFilePath: '.env',
         }),
         SequelizeModule.forRoot({
@@ -25,13 +42,31 @@ import { ProdutosService } from '../produtos/produtos.service';
             host: process.env.DB_HOST,
             port: Number(process.env.DB_PORT),
             username: process.env.DB_USER,
-            password: process.env.DB_PASS,
+            password: typeof process.env.DB_PASS !== 'string' ? '' : process.env.DB_PASS,
             database: process.env.DB_NAME,
             models: [ProdutosModel, LojasModel, AnunciosModel],
         }),
-        SequelizeModule.forFeature([ProdutosModel]),
+        SequelizeModule.forFeature([ProdutosModel, LojasModel, AnunciosModel]),
     ],
-    controllers: [AppController, ProdutosController],
-    providers: [AppService, ProdutosService, ProdutosRepository],
+    controllers: [
+        AppController,
+        ProdutosController,
+        LojasController,
+        AnunciosController,
+        ListaController,
+    ],
+    providers: [
+        // services
+        AppService,
+        ProdutosService,
+        LojasService,
+        AnunciosService,
+        ListaService,
+
+        // repositories
+        ProdutosRepository,
+        LojasRepository,
+        AnunciosRepository,
+    ],
 })
 export class AppModule {}

@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
 import { ProdutosModel } from 'src/models/produtos.model';
 
+type ProdutosWhereParams = WhereParams<ProdutosModel>;
+
 @Injectable()
 export class ProdutosRepository {
     constructor(
@@ -18,25 +20,39 @@ export class ProdutosRepository {
         return await this.produtosModel.findByPk(codBarra);
     }
 
-    async create(product: ProdutosModel): Promise<ProdutosModel> {
-        return await this.produtosModel.create({
-            ...product,
+    async getManyByCodBarra(arrCodBarras: string[]): Promise<ProdutosModel[]> {
+        return await this.produtosModel.findAll({
+            where: {
+                codBarra: arrCodBarras,
+            } as ProdutosWhereParams,
+            raw: true,
         });
     }
 
-    async update(id: string, product: ProdutosModel): Promise<ProdutosModel> {
-        const existing = await this.produtosModel.findByPk(id);
+    async create(product: ProdutosModel): Promise<[ProdutosModel, boolean]> {
+        return await this.produtosModel.findOrCreate({
+            where: {
+                codBarra: product.codBarra,
+            } as ProdutosWhereParams,
+            defaults: {
+                ...product,
+            },
+        });
+    }
+
+    async update(codBarra: string, product: ProdutosModel): Promise<ProdutosModel> {
+        const existing = await this.produtosModel.findByPk(codBarra);
 
         if (!existing) throw new Error('does not exist');
 
         return existing.update(product);
     }
 
-    async delete(id: string): Promise<number> {
+    async delete(codBarra: string): Promise<number> {
         return this.produtosModel.destroy({
             where: {
-                codBarra: id,
-            },
+                codBarra: codBarra,
+            } as ProdutosWhereParams,
         });
     }
 

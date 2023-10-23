@@ -81,17 +81,17 @@ export interface IPesquisaProdutoResponse {
             razaoSocial: string;
             nomeFantasia: string;
             telefone: string;
-        };
-        endereco: {
-            nomeLogradouro: string;
-            numeroImovel: string;
-            bairro: string;
-            cep: string;
-            /** @description Código do municipio */
-            codigoIBGE: number;
-            municipio: string;
-            latitude: number;
-            longitude: number;
+            endereco: {
+                nomeLogradouro: string;
+                numeroImovel: string;
+                bairro: string;
+                cep: string;
+                /** @description Código do municipio */
+                codigoIBGE: number;
+                municipio: string;
+                latitude: number;
+                longitude: number;
+            };
         };
     }>;
 }

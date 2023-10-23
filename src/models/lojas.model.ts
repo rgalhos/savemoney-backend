@@ -1,7 +1,7 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 @Table({
-    tableName: 'produtos',
+    tableName: 'lojas',
     freezeTableName: true,
     underscored: false,
 })
@@ -36,16 +36,18 @@ export class LojasModel extends Model {
     cep: string;
 
     @Column({
-        type: DataType.STRING,
+        type: DataType.DOUBLE,
         allowNull: true,
         unique: false,
     })
-    latitude: string;
+    latitude: number;
 
     @Column({
-        type: DataType.STRING,
+        type: DataType.DOUBLE,
         allowNull: true,
         unique: false,
     })
-    longitude: string;
+    longitude: number;
 }
+
+export type RawLojasModel = RawModel<LojasModel>;

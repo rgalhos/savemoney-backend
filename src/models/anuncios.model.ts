@@ -1,9 +1,9 @@
 import { Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
-import { ProdutosModel } from './produtos.model';
-import { LojasModel } from './lojas.model';
+import { ProdutosModel } from 'src/models/produtos.model';
+import { LojasModel } from 'src/models/lojas.model';
 
 @Table({
-    tableName: 'produtos',
+    tableName: 'anuncios',
     freezeTableName: true,
     underscored: false,
 })
@@ -11,20 +11,18 @@ export class AnunciosModel extends Model {
     @ForeignKey(() => ProdutosModel)
     @Column({
         type: DataType.STRING,
-        primaryKey: true,
         allowNull: false,
         unique: true,
     })
-    produto: string;
+    produtoId: string;
 
     @ForeignKey(() => LojasModel)
     @Column({
         type: DataType.STRING,
-        primaryKey: true,
         allowNull: false,
-        unique: true,
+        unique: false,
     })
-    loja: string;
+    lojaId: string;
 
     @Column({
         type: DataType.DOUBLE,
@@ -33,3 +31,5 @@ export class AnunciosModel extends Model {
     })
     preco: number;
 }
+
+export type RawAnunciosModel = RawModel<AnunciosModel>;
