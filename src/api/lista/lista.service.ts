@@ -79,13 +79,13 @@ export class ListaService {
             });
         }
 
-        return Object.entries(anunciosPorLoja).map(([lojaId, lista]) => {
-            return {
+        return Object.entries(anunciosPorLoja)
+            .map(([lojaId, lista]) => ({
                 loja: lojasObj[lojaId],
                 produtos: lista,
                 matches: lista.length,
                 precoTotal: Number(lista.reduce((a: any, b: any) => a + b.preco, 0))?.toFixed(2),
-            };
-        });
+            }))
+            .sort((a, b) => b.matches - a.matches);
     }
 }

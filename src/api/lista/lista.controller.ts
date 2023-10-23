@@ -16,15 +16,19 @@ export class ListaController {
         @Query('latitude') latitude: string,
         @Query('longitude') longitude: string,
         @Query('raio') raio: string,
+        @Query('max') max: string,
     ) {
         const arrCodBarra = codBarras?.split(',');
+        const maxListas = isNaN(Number(max)) ? 10 : Number(max);
 
         if (!Array.isArray(arrCodBarra) || arrCodBarra.length === 0) {
-            // return Promise.resolve({ error: true, message: 'requisição inválida' });
+            return Promise.reject({ error: true, message: 'requisição inválida' });
         }
 
         console.log('>>>>>>>>> ', { arrCodBarra, latitude, longitude, raio });
 
-        return this.listaService.handleBuildShoppingList(arrCodBarra as string[]);
+        const listas = await this.listaService.handleBuildShoppingList(arrCodBarra as string[]);
+
+        return listas.slice(0, maxListas);
     }
 }

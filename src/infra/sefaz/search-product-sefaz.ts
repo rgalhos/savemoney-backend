@@ -66,7 +66,6 @@ export async function searchProductSefaz(
     for (const el of cont) {
         const codBarras = el.produto.gtin;
         const loja = el.estabelecimento;
-        let _ok = 0; // @todo
 
         //#region parse loja
         if (
@@ -85,8 +84,6 @@ export async function searchProductSefaz(
                 longitude: loja.endereco.longitude,
                 nome: loja.nomeFantasia || loja.razaoSocial,
             };
-
-            _ok++; // @todo
         }
         //#endregion parse loja
 
@@ -103,27 +100,30 @@ export async function searchProductSefaz(
                 codBarra: codBarras,
                 nome: descricao,
             };
-
-            _ok++; // @todo
         }
         //#endregion parse produto
 
         const valorVenda = el.produto?.venda?.valorVenda;
         //#region parse anúncio
         if (
-            _ok === 2 && // @todo
+            Object.prototype.hasOwnProperty.call(parsedStores, loja.cnpj) &&
+            Object.prototype.hasOwnProperty.call(parsedProducts, codBarras) &&
             !isNaN(valorVenda) &&
             valorVenda > 0.0
         ) {
             parsedClassifieds.push({
                 lojaId: loja.cnpj, // FK->lojas(cnpj)
                 produtoId: codBarras, // FK->produtos(codBarras)
-                preco: Number(valorVenda),
+                preco: Number(valorVenda.toFixed(2)),
             });
 
             validProduct[codBarras] = (validProduct?.[codBarras] || 0) + 1;
 
             console.log(parsedClassifieds[parsedClassifieds.length - 1]);
+        } else {
+            console.log(
+                `${codBarras} - ${descricao} - ${loja.cnpj} - ${parsedStores?.[loja.cnpj].nome}`,
+            );
         }
         //#endregion parse anúncio
     }
