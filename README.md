@@ -22,14 +22,10 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
 ## Installation
 
 ```bash
-$ npm install
+$ npm ci
 ```
 
 ## Running the app
@@ -42,32 +38,100 @@ $ npm run start
 $ npm run start:dev
 
 # production mode
+$ npm run build # run once
 $ npm run start:prod
 ```
 
-## Test
+# Endpoints
 
-```bash
-# unit tests
-$ npm run test
+## Produtos
 
-# e2e tests
-$ npm run test:e2e
+### GET `/produtos/busca`
 
-# test coverage
-$ npm run test:cov
+Busca um produto
+
+Parâmetros:
+
+-   `q` - Item a ser buscado
+-   `latitude` (opcional) - Latitude do usuário
+-   `longitude` (opcional) - Longitude do usuário
+-   `raio` (opcional, padrão: 5) - Raio da busca
+
+Resposta:
+
+```typescript
+// (src/interfaces/savemoney/search-product.ts - ISearchProductResponse)
+type ISearchProductResponse = Array<{
+    codBarra: string;
+    nome: string;
+}>;
 ```
 
-## Support
+### GET `produtos/[:código de barras]`
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Retorna informações sobre o produto a partir do código de barras
 
-## Stay in touch
+Resposta:
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```typescript
+// RawModel<ProdutosModel> -> Tipo inferido de src/models/produtos.model.ts - ProdutosModel
+interface {
+    codBarra: string;
+    nome: string
+}
+```
 
-## License
+## Mercados
 
-Nest is [MIT licensed](LICENSE).
+### GET `/lojas/[:cnpj]`
+
+Retorna informações de um mercado a partir de seu CNPJ.
+
+Resposta:
+
+```typescript
+// RawModel<LojasModel> -> Tipo inferido de src/models/lojas.model.ts - LojasModel
+interface {
+    cnpj: string;
+    nome: string;
+    endereco: string;
+    cep: string;
+    latitude: number;
+    longitude: number;
+}
+```
+
+## Lista de compras
+
+### GET `/lista/`
+
+Parâmetros:
+
+-   `codBarras` - Código de barras de todos os produtos da lista de compras separados por `,`
+-   `latitude` (opcional) - Latitude do usuário
+-   `longitude` (opcional) - Longitude do usuário
+-   `raio` (opcional, padrão: 5) - Raio da busca
+-   `max`(opcional, padrão: 10) - Número máximo de listas a serem retornadas
+
+Resposta:
+
+```typescript
+// (src/interfaces/savemoney/shopping-list.ts - IBuildShoppingListResponse)
+type IBuildShoppingListResponse = Array<{
+    loja: {
+        cnpj: string;
+        nome: string;
+        endereco: string;
+        cep: string;
+        latitude: number;
+        longitude: number;
+    };
+    produtos: Array<{
+        codBarra: string;
+        nome: string;
+        preco: number;
+    }>;
+    matches: number;
+    precoTotal: string;
+}>;
+```
