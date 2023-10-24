@@ -86,6 +86,14 @@ export class ListaService {
                 matches: lista.length,
                 precoTotal: Number(lista.reduce((a: any, b: any) => a + b.preco, 0))?.toFixed(2),
             }))
-            .sort((a, b) => b.matches - a.matches);
+            .sort((a, b) => {
+                // ordena primeiramente por ordem decrescente de matches
+                if (b.matches !== a.matches) {
+                    return b.matches - a.matches;
+                }
+
+                // segundamente por ordem crescente de preço
+                return +a.precoTotal - +b.precoTotal;
+            });
     }
 }

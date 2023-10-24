@@ -22,6 +22,10 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+Repositório contendo a versão inicial do código do back-end do aplicativo SaveMoney, projeto da matéria Programação 3 do curso de Ciência da Computação - UFAL.
+
+[Ver repositório do aplicativo (/JefersonFernando/save-money/)](https://github.com/JefersonFernando/save-money/)
+
 ## Installation
 
 ```bash
