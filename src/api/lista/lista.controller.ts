@@ -27,7 +27,11 @@ export class ListaController {
 
         console.log('>>>>>>>>> ', { arrCodBarra, latitude, longitude, raio });
 
-        const listas = await this.listaService.handleBuildShoppingList(arrCodBarra as string[]);
+        const listas = await this.listaService.handleBuildShoppingList(arrCodBarra as string[], {
+            latitude,
+            longitude,
+            raio,
+        });
 
         return listas.slice(0, maxListas);
     }

@@ -14,4 +14,5 @@ export type IBuildShoppingListResponse = Array<{
     }>;
     matches: number;
     precoTotal: string;
+    distancia: number | -1;
 }>;

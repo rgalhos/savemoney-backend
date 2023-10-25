@@ -114,7 +114,7 @@ Parâmetros:
 -   `codBarras` - Código de barras de todos os produtos da lista de compras separados por `,`
 -   `latitude` (opcional) - Latitude do usuário
 -   `longitude` (opcional) - Longitude do usuário
--   `raio` (opcional, padrão: 5) - Raio da busca
+-   `raio` (opcional, padrão: 3) - Raio da busca
 -   `max`(opcional, padrão: 10) - Número máximo de listas a serem retornadas
 
 Resposta:
@@ -137,5 +137,6 @@ type IBuildShoppingListResponse = Array<{
     }>;
     matches: number;
     precoTotal: string;
+    distancia: number; // -1 caso não tenha sido especificada uma localização
 }>;
 ```
